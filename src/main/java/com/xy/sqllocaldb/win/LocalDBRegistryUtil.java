@@ -1,4 +1,4 @@
-package com.xy.sqllocaldb;
+package com.xy.sqllocaldb.win;
 
 import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Created by xiaoyao9184 on 2017/3/25.
  */
-public class LocalDBUtil {
+public class LocalDBRegistryUtil {
 
     public static boolean check64Window(){
         boolean is64bit;
@@ -58,12 +58,11 @@ public class LocalDBUtil {
                     })
                     .collect(Collectors.toList());
         } catch (RegistryException e) {
-            e.printStackTrace();
             return Collections.emptyList();
         }
     }
 
-    public static List<RegLocalDbInstalledVersion> getRegLocalDbInstalledVersions() throws RegistryException {
+    public static List<RegLocalDbInstalledVersion> getRegLocalDbInstalledVersions() {
         List<RegLocalDbInstalledVersion> list = getRegLocalDbInstalledVersions(false);
 
         if(check64Window()){
@@ -72,6 +71,9 @@ public class LocalDBUtil {
         return list;
     }
 
+    /**
+     * LocalDbInstalledVersion Model for Windows Registry
+     */
     public static class RegLocalDbInstalledVersion {
         private boolean wow64;
         private String version;

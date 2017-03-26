@@ -2,7 +2,6 @@ package com.xy.sqllocaldb.win;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-import com.xy.sqllocaldb.LocalDBUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +29,7 @@ public class SqlLocalDBNativeApiTest {
     @Test
     public void testLocalDbApi(){
         try {
-            String path = LocalDBUtil.getLocalDbApiPath();
+            String path = LocalDBRegistryUtil.getLocalDbApiPath();
             SqlLocalDBNativeApi sqlLocalDBNativeApi = Native.loadLibrary(path, SqlLocalDBNativeApi.class);
             Assert.assertNotNull(sqlLocalDBNativeApi);
         } catch (Exception e) {

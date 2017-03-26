@@ -2,11 +2,7 @@ package com.xy.sqllocaldb.win;
 
 import com.github.sarxos.winreg.RegistryException;
 import com.sun.jna.Native;
-import com.xy.sqllocaldb.LocalDBUtil;
 import com.xy.sqllocaldb.api.*;
-import com.xy.sqllocaldb.win.LocalDBWrapper;
-import com.xy.sqllocaldb.win.SqlLocalDBNativeDef;
-import com.xy.sqllocaldb.win.SqlLocalDBNativeApi;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +20,7 @@ public class SqlLocalDBWrapperTest {
 
     @Before
     public void init() throws RegistryException {
-        String path = LocalDBUtil.getLocalDbApiPath();
+        String path = LocalDBRegistryUtil.getLocalDbApiPath();
         SqlLocalDBNativeApi sqlLocalDBNativeApi = Native.loadLibrary(path, SqlLocalDBNativeApi.class);
 
         sqlLocalDBWrapperApi = new LocalDBWrapper(sqlLocalDBNativeApi);
