@@ -21,7 +21,7 @@ import java.util.List;
  // TRUE if the instance files exist on disk, FALSE otherwise
  BOOL   bExists;
 
- // Holds the LocalDBManager version for the instance in the format: major.minor.build.revision
+ // Holds the LocalDB version for the instance in the format: major.minor.build.revision
  DWORD  dwMajor;
  DWORD  dwMinor;
  DWORD  dwBuild;

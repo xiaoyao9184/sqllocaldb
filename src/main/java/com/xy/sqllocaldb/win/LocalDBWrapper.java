@@ -1,4 +1,4 @@
-package com.xy.sqllocaldb;
+package com.xy.sqllocaldb.win;
 
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
@@ -17,12 +17,12 @@ import java.util.stream.IntStream;
 /**
  * Created by xiaoyao9184 on 2017/3/25.
  */
-public class LocalDBManager implements SqlLocalDBApi {
+public class LocalDBWrapper implements SqlLocalDBApi {
 
-    // The maximum length of an SQL LocalDBManager instance name, in bytes.
+    // The maximum length of an SQL LocalDBWrapper instance name, in bytes.
     public static final int MaxVersionLength = (SqlLocalDBNativeDef.MAX_LOCALDB_VERSION_LENGTH + 1) * 2;
 
-    // The maximum length of an SQL LocalDBManager version string, in bytes.
+    // The maximum length of an SQL LocalDBWrapper version string, in bytes.
     public static final int MaxInstanceNameLength = (SqlLocalDBNativeDef.MAX_LOCALDB_INSTANCE_NAME_LENGTH + 1) * 2;
 
     // The value to pass to functions which have a reserved parameter for future use.
@@ -32,7 +32,7 @@ public class LocalDBManager implements SqlLocalDBApi {
 
     private SqlLocalDBNativeApi sqlLocalDBNativeApi;
 
-    public LocalDBManager(SqlLocalDBNativeApi sqlLocalDBNativeApi){
+    public LocalDBWrapper(SqlLocalDBNativeApi sqlLocalDBNativeApi){
         this.sqlLocalDBNativeApi = sqlLocalDBNativeApi;
     }
 

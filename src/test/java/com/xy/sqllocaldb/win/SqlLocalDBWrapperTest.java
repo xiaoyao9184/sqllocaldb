@@ -1,9 +1,10 @@
-package com.xy.sqllocaldb;
+package com.xy.sqllocaldb.win;
 
 import com.github.sarxos.winreg.RegistryException;
 import com.sun.jna.Native;
+import com.xy.sqllocaldb.LocalDBUtil;
 import com.xy.sqllocaldb.api.*;
-import com.xy.sqllocaldb.win.LocalDBInstanceInfo;
+import com.xy.sqllocaldb.win.LocalDBWrapper;
 import com.xy.sqllocaldb.win.SqlLocalDBNativeDef;
 import com.xy.sqllocaldb.win.SqlLocalDBNativeApi;
 import org.junit.Assert;
@@ -16,23 +17,23 @@ import java.util.UUID;
 /**
  * Created by xiaoyao9184 on 2017/3/25.
  */
-public class SqlLocalDBManagerTest {
+public class SqlLocalDBWrapperTest {
 
 
-    private LocalDBManager sqlLocalDBManagerApi;
+    private LocalDBWrapper sqlLocalDBWrapperApi;
 
     @Before
     public void init() throws RegistryException {
         String path = LocalDBUtil.getLocalDbApiPath();
         SqlLocalDBNativeApi sqlLocalDBNativeApi = Native.loadLibrary(path, SqlLocalDBNativeApi.class);
 
-        sqlLocalDBManagerApi = new LocalDBManager(sqlLocalDBNativeApi);
+        sqlLocalDBWrapperApi = new LocalDBWrapper(sqlLocalDBNativeApi);
     }
 
     @Test
     public void testFormatMessage(){
         try {
-            String msg = sqlLocalDBManagerApi.formatMessage(SqlLocalDBNativeDef.LOCALDB_ERROR_INSTANCE_STOP_FAILED);
+            String msg = sqlLocalDBWrapperApi.formatMessage(SqlLocalDBNativeDef.LOCALDB_ERROR_INSTANCE_STOP_FAILED);
             Assert.assertNotNull(msg);
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +44,7 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testGetVersions(){
         try {
-            List<String> versions = sqlLocalDBManagerApi.getVersions();
+            List<String> versions = sqlLocalDBWrapperApi.getVersions();
             Assert.assertNotNull(versions);
             Assert.assertNotEquals(versions.size(),-1);
         } catch (Exception e) {
@@ -55,9 +56,9 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testGetVersion(){
         try {
-            List<String> versions = sqlLocalDBManagerApi.getVersions();
+            List<String> versions = sqlLocalDBWrapperApi.getVersions();
             String last = versions.get(versions.size() - 1);
-            SqlLocalDBVersionInfo info = sqlLocalDBManagerApi.getVersion(last);
+            SqlLocalDBVersionInfo info = sqlLocalDBWrapperApi.getVersion(last);
             Assert.assertNotNull(info);
             int[] v = info.getVersion();
             Assert.assertNotNull(v);
@@ -71,7 +72,7 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testGetInstances(){
         try {
-            List<String> instances = sqlLocalDBManagerApi.getInstances();
+            List<String> instances = sqlLocalDBWrapperApi.getInstances();
             Assert.assertNotNull(instances);
             Assert.assertNotEquals(instances.size(),-1);
         } catch (Exception e) {
@@ -83,11 +84,11 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testGetInstance(){
         try {
-            List<String> instances = sqlLocalDBManagerApi.getInstances();
+            List<String> instances = sqlLocalDBWrapperApi.getInstances();
             Assert.assertNotEquals(instances.size(),0);
 
             String first = instances.get(0);
-            SqlLocalDBInstanceInfo info = sqlLocalDBManagerApi.getInstance(first);
+            SqlLocalDBInstanceInfo info = sqlLocalDBWrapperApi.getInstance(first);
             String name = info.getName();
             Assert.assertNotNull(info);
             Assert.assertNotNull(name);
@@ -100,17 +101,17 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testCreateInstance(){
         try {
-            List<String> versions = sqlLocalDBManagerApi.getVersions();
+            List<String> versions = sqlLocalDBWrapperApi.getVersions();
             Assert.assertNotEquals(versions.size(),0);
             String version = versions.get(0);
             String name = UUID.randomUUID().toString();
 
-            assert sqlLocalDBManagerApi.createInstance(version,name);
-            SqlLocalDBInstanceInfo info = sqlLocalDBManagerApi.getInstance(name);
+            assert sqlLocalDBWrapperApi.createInstance(version,name);
+            SqlLocalDBInstanceInfo info = sqlLocalDBWrapperApi.getInstance(name);
             Assert.assertNotNull(info);
             Assert.assertTrue(info.isExists());
 
-            assert sqlLocalDBManagerApi.deleteInstance(name);
+            assert sqlLocalDBWrapperApi.deleteInstance(name);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,18 +121,18 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testDeleteInstance(){
         try {
-            List<String> versions = sqlLocalDBManagerApi.getVersions();
+            List<String> versions = sqlLocalDBWrapperApi.getVersions();
             Assert.assertNotEquals(versions.size(),0);
             String version = versions.get(0);
             String name = UUID.randomUUID().toString();
 
-            assert sqlLocalDBManagerApi.createInstance(version,name);
-            SqlLocalDBInstanceInfo info = sqlLocalDBManagerApi.getInstance(name);
+            assert sqlLocalDBWrapperApi.createInstance(version,name);
+            SqlLocalDBInstanceInfo info = sqlLocalDBWrapperApi.getInstance(name);
             Assert.assertNotNull(info);
             Assert.assertTrue(info.isExists());
 
-            assert sqlLocalDBManagerApi.deleteInstance(name);
-            info = sqlLocalDBManagerApi.getInstance(name);
+            assert sqlLocalDBWrapperApi.deleteInstance(name);
+            info = sqlLocalDBWrapperApi.getInstance(name);
             Assert.assertNotNull(info);
             Assert.assertFalse(info.isExists());
         } catch (Exception e) {
@@ -143,18 +144,18 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testStartInstance(){
         try {
-            List<String> instances = sqlLocalDBManagerApi.getInstances();
+            List<String> instances = sqlLocalDBWrapperApi.getInstances();
             Assert.assertNotEquals(instances.size(),0);
 
             String first = instances.get(0);
-            String pipe = sqlLocalDBManagerApi.startInstance(first);
+            String pipe = sqlLocalDBWrapperApi.startInstance(first);
             Assert.assertNotNull(pipe);
 
-            SqlLocalDBInstanceInfo info = sqlLocalDBManagerApi.getInstance(first);
+            SqlLocalDBInstanceInfo info = sqlLocalDBWrapperApi.getInstance(first);
             Assert.assertNotNull(info);
             Assert.assertTrue(info.isRunning());
 
-            sqlLocalDBManagerApi.stopInstance(first,StopInstanceOptions.None,30);
+            sqlLocalDBWrapperApi.stopInstance(first,StopInstanceOptions.None,30);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -164,11 +165,11 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testStopInstance(){
         try {
-            List<String> instances = sqlLocalDBManagerApi.getInstances();
+            List<String> instances = sqlLocalDBWrapperApi.getInstances();
             String first = instances.get(0);
-            assert sqlLocalDBManagerApi.stopInstance(first, StopInstanceOptions.None, 30);
+            assert sqlLocalDBWrapperApi.stopInstance(first, StopInstanceOptions.None, 30);
 
-            SqlLocalDBInstanceInfo info = sqlLocalDBManagerApi.getInstance(first);
+            SqlLocalDBInstanceInfo info = sqlLocalDBWrapperApi.getInstance(first);
             Assert.assertNotNull(info);
             Assert.assertFalse(info.isRunning());
         } catch (Exception e) {
@@ -180,7 +181,7 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testStartTracing(){
         try {
-            assert sqlLocalDBManagerApi.startTracing();
+            assert sqlLocalDBWrapperApi.startTracing();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -190,7 +191,7 @@ public class SqlLocalDBManagerTest {
     @Test
     public void testStopTracing(){
         try {
-            assert sqlLocalDBManagerApi.stopTracing();
+            assert sqlLocalDBWrapperApi.stopTracing();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -29,7 +29,7 @@ import java.util.List;
  // TRUE if the instance is running at the moment, FALSE otherwise
  BOOL   bIsRunning;
 
- // Holds the LocalDBManager version for the instance in the format: major.minor.build.revision
+ // Holds the LocalDB version for the instance in the format: major.minor.build.revision
  DWORD  dwMajor;
  DWORD  dwMinor;
  DWORD  dwBuild;
